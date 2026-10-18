@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskFlow Pro — Fully Functional To-Do Application</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Background glow shapes -->
+    <div class="bg-blur bg-blur-1"></div>
+    <div class="bg-blur bg-blur-2"></div>
+
+    <!-- Main Container -->
+    <div class="app-container">
+        
+        <!-- Top App Navigation / Header -->
+        <header class="app-header">
+            <div class="header-brand">
+                <div class="brand-logo">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                    </svg>
+                </div>
+                <div class="brand-info">
+                    <div class="brand-title-wrap">
+                        <h1>TaskFlow <span>Pro</span></h1>
+                        <span class="badge-tag">Internship Task</span>
+                    </div>
+                    <p class="brand-subtitle" id="currentDateDisplay">Sunday, October 18, 2026</p>
+                </div>
+            </div>
+
+            <!-- Header Action Controls -->
+            <div class="header-actions">
+                <div class="search-box">
+                    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <input type="text" id="searchInput" placeholder="Search tasks..." autocomplete="off">
+                    <button id="clearSearchBtn" class="clear-search-btn" title="Clear search" aria-label="Clear search" hidden>✕</button>
+                    <kbd class="shortcut-hint">Ctrl K</kbd>
+                </div>
+
+                <!-- Sound Effects Toggle -->
+                <button id="soundToggleBtn" class="icon-btn" title="Toggle Sound Feedback" aria-label="Toggle Sound">
+                    <svg class="icon-sound-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                        <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                    </svg>
+                    <svg class="icon-sound-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                        <line x1="23" y1="9" x2="17" y2="15"></line>
+                        <line x1="17" y1="9" x2="23" y2="15"></line>
+                    </svg>
+                </button>
+
+                <!-- Theme Toggle Button -->
+                <button id="themeToggleBtn" class="icon-btn" title="Toggle Theme (Dark / Light)" aria-label="Toggle Theme">
+                    <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </button>
+
+                <!-- Data Menu Button (Export/Import/Reset) -->
+                <div class="dropdown-wrapper">
+                    <button id="dataMenuBtn" class="icon-btn" title="Backup & Data Options" aria-label="Data Options">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="1"></circle>
+                            <circle cx="19" cy="12" r="1"></circle>
+                            <circle cx="5" cy="12" r="1"></circle>
+                        </svg>
+                    </button>
+                    <div id="dataMenuDropdown" class="dropdown-menu">
+                        <button id="exportDataBtn" class="dropdown-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                            Export to JSON
+                        </button>
+                        <label for="importFileInput" class="dropdown-item file-import-label">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                            Import from JSON
+                            <input type="file" id="importFileInput" accept=".json" style="display:none;">
+                        </label>
+                        <div class="dropdown-divider"></div>
+                        <button id="loadDemoBtn" class="dropdown-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+                            Load Sample Tasks
+                        </button>
+                        <button id="clearAllBtn" class="dropdown-item text-danger">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                            Delete All Tasks
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Analytics & Progress Hero Card -->
+        <section class="stats-card">
+            <div class="stats-header">
+                <div>
+                    <h2 class="stats-greeting" id="greetingMessage">Good afternoon, Raj! 👋</h2>
+                    <p class="stats-subtext" id="progressSummary">You've completed 0 of 0 tasks today.</p>
+                </div>
+                <div class="progress-ring-container">
+                    <div class="progress-percentage-label">
+                        <span id="progressPercentNum">0</span>%
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="progress-bar-track">
+                <div class="progress-bar-fill" id="progressBarFill" style="width: 0%;"></div>
+            </div>
+
+            <!-- Quick Counter Pills -->
+            <div class="stats-counters-grid">
+                <div class="counter-item" data-filter="all">
+                    <span class="counter-number" id="countAll">0</span>
+                    <span class="counter-label">Total</span>
+                </div>
+                <div class="counter-item" data-filter="active">
+                    <span class="counter-number color-pending" id="countActive">0</span>
+                    <span class="counter-label">In Progress</span>
+                </div>
+                <div class="counter-item" data-filter="completed">
+                    <span class="counter-number color-completed" id="countCompleted">0</span>
+                    <span class="counter-label">Completed</span>
+                </div>
+                <div class="counter-item" data-filter="starred">
+                    <span class="counter-number color-starred" id="countStarred">0</span>
+                    <span class="counter-label">Starred</span>
+                </div>
+                <div class="counter-item" data-filter="overdue">
+                    <span class="counter-number color-overdue" id="countOverdue">0</span>
+                    <span class="counter-label">Overdue</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Task Creator Form Section -->
+        <section class="task-form-card">
+            <form id="taskInputForm" novalidate>
+                <div class="form-primary-row">
+                    <div class="input-icon-wrap">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                    </div>
+                    <input type="text" id="taskTitleInput" class="task-title-input" placeholder="What needs to be done? (Press 'N' to focus)" maxlength="150" required autocomplete="off">
+                    
+                    <button type="button" id="toggleOptionsBtn" class="btn-toggle-options" title="Expand extra options (Due date, category, notes, priority)">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="4" y1="21" x2="4" y2="14"></line>
+                            <line x1="4" y1="10" x2="4" y2="3"></line>
+                            <line x1="12" y1="21" x2="12" y2="12"></line>
+                            <line x1="12" y1="8" x2="12" y2="3"></line>
+                            <line x1="20" y1="21" x2="20" y2="16"></line>
+                            <line x1="20" y1="12" x2="20" y2="3"></line>
+                            <line x1="1" y1="14" x2="7" y2="14"></line>
+                            <line x1="9" y1="8" x2="15" y2="8"></line>
+                            <line x1="17" y1="16" x2="23" y2="16"></line>
+                        </svg>
+                        <span>Details</span>
+                    </button>
+                    
+                    <button type="submit" id="addTaskSubmitBtn" class="btn-primary">
+                        <span>Add Task</span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Collapsible Detailed Task Fields -->
+                <div id="extendedFormOptions" class="form-extended-options">
+                    <div class="options-grid">
+                        <!-- Category Selector -->
+                        <div class="option-field">
+                            <label for="taskCategorySelect">Category</label>
+                            <div class="select-wrap">
+                                <select id="taskCategorySelect">
+                                    <option value="General">📌 General</option>
+                                    <option value="Work">💼 Work & Internship</option>
+                                    <option value="Coding">💻 Coding & Tech</option>
+                                    <option value="Study">📚 Study / University</option>
+                                    <option value="Personal">🏠 Personal</option>
+                                    <option value="Health">💪 Health & Fitness</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Priority Selector -->
+                        <div class="option-field">
+                            <label for="taskPrioritySelect">Priority</label>
+                            <div class="select-wrap">
+                                <select id="taskPrioritySelect">
+                                    <option value="medium" selected>⚡ Medium Priority</option>
+                                    <option value="high">🔥 High Priority</option>
+                                    <option value="low">🌱 Low Priority</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Due Date & Time -->
+                        <div class="option-field">
+                            <label for="taskDueDateInput">Due Date</label>
+                            <input type="date" id="taskDueDateInput">
+                        </div>
+
+                        <!-- Starred initially? -->
+                        <div class="option-field option-checkbox-field">
+                            <label class="checkbox-label" for="taskStarCheckbox">
+                                <input type="checkbox" id="taskStarCheckbox">
+                                <span class="custom-chk"></span>
+                                <span>Star as important</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Optional Description / Notes -->
+                    <div class="option-field-full">
+                        <label for="taskNotesInput">Additional Notes / Subtasks (Optional)</label>
+                        <textarea id="taskNotesInput" rows="2" placeholder="Add extra context, links, or checklist instructions..."></textarea>
+                    </div>
+                </div>
+            </form>
+        </section>
+
+        <!-- Filter & Control Toolbar -->
+        <section class="toolbar-section">
+            <div class="filters-tab-strip" role="tablist">
+                <button class="filter-tab active" data-filter="all" role="tab" aria-selected="true">
+                    <span>All</span>
+                    <span class="tab-badge" id="tabBadgeAll">0</span>
+                </button>
+                <button class="filter-tab" data-filter="active" role="tab" aria-selected="false">
+                    <span>In Progress</span>
+                    <span class="tab-badge" id="tabBadgeActive">0</span>
+                </button>
+                <button class="filter-tab" data-filter="completed" role="tab" aria-selected="false">
+                    <span>Completed</span>
+                    <span class="tab-badge" id="tabBadgeCompleted">0</span>
+                </button>
+                <button class="filter-tab" data-filter="today" role="tab" aria-selected="false">
+                    <span>Due Today</span>
+                    <span class="tab-badge" id="tabBadgeToday">0</span>
+                </button>
+                <button class="filter-tab" data-filter="starred" role="tab" aria-selected="false">
+                    <span>⭐ Starred</span>
+                </button>
+            </div>
+
+            <div class="toolbar-controls-right">
+                <!-- Category Filter -->
+                <div class="filter-dropdown-wrap">
+                    <select id="categoryFilterSelect" title="Filter by category">
+                        <option value="all">All Categories</option>
+                        <option value="General">📌 General</option>
+                        <option value="Work">💼 Work</option>
+                        <option value="Coding">💻 Coding</option>
+                        <option value="Study">📚 Study</option>
+                        <option value="Personal">🏠 Personal</option>
+                        <option value="Health">💪 Health</option>
+                    </select>
+                </div>
+
+                <!-- Sort Selector -->
+                <div class="sort-dropdown-wrap">
+                    <select id="sortSelect" title="Sort tasks by">
+                        <option value="newest">🕒 Newest First</option>
+                        <option value="oldest">⏳ Oldest First</option>
+                        <option value="priority">🔥 Highest Priority</option>
+                        <option value="dueDate">📅 Due Date (Earliest)</option>
+                        <option value="alphabetical">🔤 Title (A–Z)</option>
+                    </select>
+                </div>
+
+                <!-- Clear Completed Button -->
+                <button id="clearCompletedBtn" class="btn-subtle" title="Clear all completed tasks">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    <span>Clear Done</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Active Filter Indicator Banner (when search or specific filter is active) -->
+        <div id="filterBanner" class="filter-banner" style="display:none;">
+            <div class="filter-banner-text">
+                <span id="filterBannerMessage">Showing filtered results</span>
+            </div>
+            <button id="resetFiltersBtn" class="filter-banner-reset">Reset Filters</button>
+        </div>
+
+        <!-- Task List Container -->
+        <main class="task-list-section">
+            <ul id="taskList" class="task-list" aria-live="polite">
+                <!-- Tasks will be dynamically rendered here via script.js -->
+            </ul>
+
+            <!-- Empty State Illustration -->
+            <div id="emptyState" class="empty-state" style="display:none;">
+                <div class="empty-icon-wrap">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M9 11l3 3L22 4"></path>
+                        <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                    </svg>
+                </div>
+                <h3 id="emptyStateTitle">No tasks found</h3>
+                <p id="emptyStateDesc">You're all clear! Add a new task above to stay productive and organized.</p>
+                <button id="emptyStateActionBtn" class="btn-secondary">Add Your First Task</button>
+            </div>
+        </main>
+
+        <!-- Footer / Credits -->
+        <footer class="app-footer">
+            <div class="footer-content">
+                <p>TaskFlow Pro &bull; Web Development Final Internship Project &bull; Created by <strong>Raj Kumar</strong></p>
+                <div class="footer-links">
+                    <span class="footer-badge">HTML5</span>
+                    <span class="footer-badge">CSS3 Custom Properties</span>
+                    <span class="footer-badge">Vanilla JavaScript ES6+</span>
+                    <span class="footer-badge">LocalStorage Sync</span>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- Edit Task Modal -->
+    <div id="editModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle" style="display:none;">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 id="modalTitle">Edit Task</h3>
+                <button id="closeModalBtn" class="icon-btn" aria-label="Close modal">✕</button>
+            </div>
+            <form id="editTaskForm">
+                <input type="hidden" id="editTaskId">
+                
+                <div class="modal-field">
+                    <label for="editTaskTitle">Task Title *</label>
+                    <input type="text" id="editTaskTitle" class="text-input" maxlength="150" required>
+                </div>
+
+                <div class="modal-field">
+                    <label for="editTaskNotes">Notes / Description</label>
+                    <textarea id="editTaskNotes" rows="3" class="text-input"></textarea>
+                </div>
+
+                <div class="modal-row">
+                    <div class="modal-field">
+                        <label for="editTaskCategory">Category</label>
+                        <select id="editTaskCategory" class="text-input">
+                            <option value="General">📌 General</option>
+                            <option value="Work">💼 Work & Internship</option>
+                            <option value="Coding">💻 Coding & Tech</option>
+                            <option value="Study">📚 Study</option>
+                            <option value="Personal">🏠 Personal</option>
+                            <option value="Health">💪 Health</option>
+                        </select>
+                    </div>
+
+                    <div class="modal-field">
+                        <label for="editTaskPriority">Priority</label>
+                        <select id="editTaskPriority" class="text-input">
+                            <option value="high">🔥 High Priority</option>
+                            <option value="medium">⚡ Medium Priority</option>
+                            <option value="low">🌱 Low Priority</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="modal-row">
+                    <div class="modal-field">
+                        <label for="editTaskDueDate">Due Date</label>
+                        <input type="date" id="editTaskDueDate" class="text-input">
+                    </div>
+
+                    <div class="modal-field modal-field-checkbox">
+                        <label class="checkbox-label" for="editTaskStarred">
+                            <input type="checkbox" id="editTaskStarred">
+                            <span class="custom-chk"></span>
+                            <span>Star as Important</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" id="cancelEditBtn" class="btn-secondary">Cancel</button>
+                    <button type="submit" class="btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="toast-container" aria-live="assertive"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
