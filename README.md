@@ -94,7 +94,7 @@ proj/
    - Commit: `git commit -m "Complete fully functional To-Do website task"`
    - Push to your GitHub account (public repository).
 2. **Live Deployment**:
-   - Deploy free to **GitHub Pages**, **Netlify**, or **Vercel** with one click.
+   -https://techhexa.github.io/TaskFlow/
 3. **Submission Form**:
    - Submit your **GitHub Repo URL** and **Live Deployment URL** in the internship portal.
 
